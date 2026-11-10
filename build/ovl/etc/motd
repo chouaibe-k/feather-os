@@ -1,0 +1,8 @@
+========================================================================
+  Welcome to FeatherLinux (Ultra-Lightweight Old Laptop Edition)
+========================================================================
+  To install to your laptop drive:
+    1. Run: setup-alpine -f /opt/featherlinux/feather-answers
+    2. Reboot into your disk and run:
+       /opt/featherlinux/install-feather-desktop.sh
+========================================================================

@@ -1,0 +1,28 @@
+#!/bin/sh
+# FeatherLinux Openbox Session Autostart
+# Installed to: ~/.config/openbox/autostart
+
+# 1. Configure keyboard & touchpad (enable tap-to-click and natural scroll on laptops)
+setxkbmap us &
+xinput list --name-only | grep -i -E "touchpad|synaptics" | while read -r dev; do
+    xinput set-prop "$dev" "libinput Tapping Enabled" 1 2>/dev/null || true
+    xinput set-prop "$dev" "libinput Natural Scrolling Enabled" 1 2>/dev/null || true
+done
+
+# 2. Start PipeWire low-latency audio server
+pipewire &
+pipewire-pulse &
+wireplumber &
+
+# 3. Start PCManFM in desktop management mode (handles wallpaper + desktop icons in ~12MB RAM)
+pcmanfm --desktop &
+
+# 4. Launch Tint2 bottom taskbar / panel (~8MB RAM)
+tint2 &
+
+# 5. Launch NetworkManager Wi-Fi tray applet
+nm-applet &
+
+# 6. Enable DPMS screen power saving (blank after 10 mins idle)
+xset +dpms
+xset dpms 600 600 600

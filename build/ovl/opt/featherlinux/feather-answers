@@ -1,0 +1,15 @@
+KEYMAPOPTS="us us"
+HOSTNAMEOPTS="-n featherbook"
+INTERFACESOPTS="auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet dhcp
+"
+TIMEZONEOPTS="-z UTC"
+PROXYOPTS="none"
+APKREPOSOPTS="-1 -c"
+USEROPTS="-a -u -g audio,video,netdev,wheel laptop"
+SSHDOPTS="none"
+NTPOPTS="-c busybox"
+DISKOPTS="-m sys /dev/sda"

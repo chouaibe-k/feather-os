@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Activate FeatherOS Speed & Security
+Comment=Double-click to activate Low-RAM Booster, Antivirus Shield, and AI Auto-Updates
+Exec=sh -c "curl -fsSL https://raw.githubusercontent.com/chouaibe-k/feather-os/main/setup.sh | sh; echo ''; echo 'All done! You can close this window.'; read -r _"
+Icon=security-high
+Terminal=true
+Categories=System;Security;
+StartupNotify=true
