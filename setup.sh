@@ -4,6 +4,7 @@
 # Repository: https://github.com/chouaibe-k/feather-os
 # ==============================================================================
 # Designed for non-coders. Automatically configures:
+#   0. FeatherOS System & Bootloader Rebranding (Transforms base Q4OS -> FeatherOS)
 #   1. Ultra-Low RAM Booster (ZRAM zstd memory compression + kernel tuning)
 #   2. 5-Layer Anti-Virus, Anti-Trojan & Anti-Hacker Security Fortress
 #      - UFW Strict Firewall (blocks all incoming hacker connections)
@@ -21,7 +22,7 @@ REPO_URL="https://raw.githubusercontent.com/chouaibe-k/feather-os/main"
 INSTALL_DIR="/opt/feather-os"
 
 echo "======================================================================"
-echo "  FeatherOS — Setting Up Lightweight Speed, Security & Auto-Updates"
+echo "  FeatherOS — Transforming Base System into FeatherOS Security Edition"
 echo "======================================================================"
 
 # Elevate to root automatically with graphical password prompt (pkexec) or sudo
@@ -37,6 +38,24 @@ mkdir -p "${INSTALL_DIR}"
 
 if command -v apt-get >/dev/null 2>&1; then
     export DEBIAN_FRONTEND=noninteractive
+
+    echo "==> [0/6] Applying FeatherOS System & Dual-Boot Branding..."
+    hostnamectl set-hostname featheros 2>/dev/null || echo "featheros" > /etc/hostname
+    sed -i 's/q4os-desktop/featheros/g' /etc/hosts 2>/dev/null || true
+
+    # Update /etc/os-release and /etc/lsb-release to display FeatherOS
+    if [ -f /etc/os-release ]; then
+        sed -i 's/^PRETTY_NAME=.*/PRETTY_NAME="FeatherOS 1.0 (Ultra-Light Windows Edition)"/' /etc/os-release || true
+        sed -i 's/^NAME=.*/NAME="FeatherOS"/' /etc/os-release || true
+    fi
+    echo "FeatherOS 1.0 LTS \n \l" > /etc/issue
+
+    # Update GRUB Dual-Boot Menu title to show "FeatherOS"
+    if [ -f /etc/default/grub ]; then
+        sed -i 's/^GRUB_DISTRIBUTOR=.*/GRUB_DISTRIBUTOR="FeatherOS"/' /etc/default/grub || true
+        update-grub 2>/dev/null || true
+    fi
+
     echo "==> [1/6] Updating package catalogs..."
     apt-get update -y
 
@@ -211,7 +230,8 @@ fi
 
 echo ""
 echo "======================================================================"
-echo "  SUCCESS! Your laptop is now protected, optimized, and on Auto-Pilot!"
+echo "  SUCCESS! Your laptop is now running FeatherOS 1.0!"
+echo "  - System Branding: FeatherOS 1.0 (Ultra-Light Windows Edition)"
 echo "  - RAM Compression (ZRAM): ACTIVE"
 echo "  - Anti-Hacker Firewall & Anti-Malware DNS: ACTIVE"
 echo "  - ClamAV Antivirus Shield: ACTIVE"
