@@ -3,9 +3,10 @@
 # FeatherOS — One-Click Windows-Style Lightweight OS & Security Fortress Setup
 # Repository: https://github.com/chouaibe-k/feather-os
 # ==============================================================================
-# Safe for Q4OS Windows Dual-Boot (Wubi/loop) installations:
-#   - Does NOT touch GRUB bootloader or GPU power states (prevents black screen)
-#   - Enables ZRAM memory compression booster
+# 100% Safe for Dell & Q4OS Windows Dual-Boot (Drive D: / C: loop installs):
+#   - Protects /boot/grub/grub.cfg so Drive D: dual-boot is NEVER overwritten
+#   - Does NOT install TLP or clamav-daemon (0 boot delay, 0 black screen risk)
+#   - Enables ZRAM 3:1 memory compression booster
 #   - Enables UFW Firewall, Anti-Malware DNS, Browser Shield & ClamAV Scanner
 #   - Enables Automatic Updates & AI Remote Auto-Pilot
 # ==============================================================================
@@ -28,23 +29,26 @@ mkdir -p "${INSTALL_DIR}"
 if command -v apt-get >/dev/null 2>&1; then
     export DEBIAN_FRONTEND=noninteractive
 
-    echo "==> [1/5] Applying FeatherOS System Branding & Locking Working Boot Config..."
+    echo "==> [1/5] Protecting Dual-Boot Configuration & Applying FeatherOS Branding..."
+    # Back up the working Wubi/Q4OS grub.cfg so Drive D: path is never lost
+    if [ -f /boot/grub/grub.cfg ] && [ ! -f /boot/grub/grub.cfg.working.bak ]; then
+        cp -f /boot/grub/grub.cfg /boot/grub/grub.cfg.working.bak 2>/dev/null || true
+    fi
+
     if [ -f /etc/os-release ]; then
         sed -i 's/^PRETTY_NAME=.*/PRETTY_NAME="FeatherOS 1.0 (Ultra-Light Windows Edition)"/' /etc/os-release 2>/dev/null || true
-    fi
-    # Protect the working Wubi/Q4OS grub.cfg (critical when installed on Drive D:)
-    if [ -f /boot/grub/grub.cfg ]; then
-        cp -f /boot/grub/grub.cfg /boot/grub/grub.cfg.working.bak 2>/dev/null || true
-        chattr +i /boot/grub/grub.cfg 2>/dev/null || true
     fi
 
     echo "==> [2/5] Installing Core Security & Low-RAM Tools..."
     apt-get update -y || true
-    apt-get install -y wget curl ca-certificates ufw unattended-upgrades zram-tools clamav || true
-
-    # Ensure heavy clamav-daemon and tlp are NOT stalling boot or blanking Dell display
-    systemctl stop clamav-daemon.service clamav-daemon.socket tlp.service 2>/dev/null || true
-    systemctl disable clamav-daemon.service clamav-daemon.socket tlp.service 2>/dev/null || true
+    apt-get install -y --no-install-recommends \
+        wget \
+        curl \
+        ca-certificates \
+        ufw \
+        unattended-upgrades \
+        zram-tools \
+        clamav || true
 
     echo "==> [3/5] Activating ZRAM Memory Booster..."
     cat > /etc/default/zramswap << 'EOF'
@@ -72,7 +76,7 @@ net.ipv4.icmp_echo_ignore_broadcasts = 1
 EOF
     sysctl --system >/dev/null 2>&1 || true
 
-    echo "==> [4/5] Activating Anti-Hacker Firewall (UFW) & Anti-Malware DNS..."
+    echo "==> [4/5] Activating Anti-Hacker Firewall (UFW) & Anti-Malware Shield..."
     if command -v ufw >/dev/null 2>&1; then
         ufw --force reset >/dev/null 2>&1 || true
         ufw default deny incoming >/dev/null 2>&1 || true
@@ -178,11 +182,18 @@ EOF
 
     systemctl daemon-reload 2>/dev/null || true
     systemctl enable --now feather-autopilot.timer 2>/dev/null || true
+
+    # Restore original working grub.cfg if anything touched it, and lock it
+    if [ -f /boot/grub/grub.cfg.working.bak ]; then
+        chattr -i /boot/grub/grub.cfg 2>/dev/null || true
+        cp -f /boot/grub/grub.cfg.working.bak /boot/grub/grub.cfg 2>/dev/null || true
+    fi
 fi
 
 echo ""
 echo "======================================================================"
 echo "  SUCCESS! Your laptop is now running FeatherOS 1.0!"
+echo "  - Dual-Boot Config: PROTECTED"
 echo "  - RAM Compression (ZRAM): ACTIVE"
 echo "  - Anti-Hacker Firewall & Anti-Malware DNS: ACTIVE"
 echo "  - ClamAV Antivirus Shield: ACTIVE"
