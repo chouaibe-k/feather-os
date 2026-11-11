@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="44" height="168" viewBox="0 0 44 168">
+  <g id="active-center">
+    <rect x="0" y="0" width="44" height="28" fill="none"/>
+    <rect x="17" y="9" width="10" height="10" rx="1" fill="none" stroke="#e5e9f0" stroke-width="1.2"/>
+  </g>
+  <g id="hover-center" transform="translate(0,28)">
+    <rect x="0" y="0" width="44" height="28" fill="#ffffff" fill-opacity="0.1"/>
+    <rect x="17" y="9" width="10" height="10" rx="1" fill="none" stroke="#ffffff" stroke-width="1.2"/>
+  </g>
+  <g id="pressed-center" transform="translate(0,56)">
+    <rect x="0" y="0" width="44" height="28" fill="#ffffff" fill-opacity="0.16"/>
+    <rect x="17" y="9" width="10" height="10" rx="1" fill="none" stroke="#ffffff" stroke-width="1.2"/>
+  </g>
+  <g id="inactive-center" transform="translate(0,84)">
+    <rect x="0" y="0" width="44" height="28" fill="none"/>
+    <rect x="17" y="9" width="10" height="10" rx="1" fill="none" stroke="#7c8594" stroke-width="1.2"/>
+  </g>
+  <g id="hover-inactive-center" transform="translate(0,112)">
+    <rect x="0" y="0" width="44" height="28" fill="#ffffff" fill-opacity="0.1"/>
+    <rect x="17" y="9" width="10" height="10" rx="1" fill="none" stroke="#ffffff" stroke-width="1.2"/>
+  </g>
+  <g id="deactivated-center" transform="translate(0,140)">
+    <rect x="0" y="0" width="44" height="28" fill="none"/>
+    <rect x="17" y="9" width="10" height="10" rx="1" fill="none" stroke="#555c69" stroke-width="1.2"/>
+  </g>
+</svg>

@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="44" height="168" viewBox="0 0 44 168">
+  <!-- Active Normal -->
+  <g id="active-center">
+    <rect x="0" y="0" width="44" height="28" fill="none"/>
+    <path d="M 17,9 L 27,19 M 27,9 L 17,19" stroke="#e5e9f0" stroke-width="1.2" stroke-linecap="round"/>
+  </g>
+  <!-- Hover (Windows 11 Red #c42b1c / #e81123) -->
+  <g id="hover-center" transform="translate(0,28)">
+    <rect x="0" y="0" width="44" height="28" fill="#c42b1c"/>
+    <path d="M 17,9 L 27,19 M 27,9 L 17,19" stroke="#ffffff" stroke-width="1.3" stroke-linecap="round"/>
+  </g>
+  <!-- Pressed -->
+  <g id="pressed-center" transform="translate(0,56)">
+    <rect x="0" y="0" width="44" height="28" fill="#a82012"/>
+    <path d="M 17,9 L 27,19 M 27,9 L 17,19" stroke="#ffffff" stroke-width="1.3" stroke-linecap="round"/>
+  </g>
+  <!-- Inactive -->
+  <g id="inactive-center" transform="translate(0,84)">
+    <rect x="0" y="0" width="44" height="28" fill="none"/>
+    <path d="M 17,9 L 27,19 M 27,9 L 17,19" stroke="#7c8594" stroke-width="1.2" stroke-linecap="round"/>
+  </g>
+  <!-- Hover Inactive -->
+  <g id="hover-inactive-center" transform="translate(0,112)">
+    <rect x="0" y="0" width="44" height="28" fill="#c42b1c"/>
+    <path d="M 17,9 L 27,19 M 27,9 L 17,19" stroke="#ffffff" stroke-width="1.3" stroke-linecap="round"/>
+  </g>
+  <!-- Deactivated -->
+  <g id="deactivated-center" transform="translate(0,140)">
+    <rect x="0" y="0" width="44" height="28" fill="none"/>
+    <path d="M 17,9 L 27,19 M 27,9 L 17,19" stroke="#555c69" stroke-width="1.2" stroke-linecap="round"/>
+  </g>
+</svg>

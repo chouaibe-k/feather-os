@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300">
+  <!-- Active Window Decoration (Slim Dark Mica #191d24 with 1px #333b4a refined border) -->
+  <g id="decoration-center">
+    <rect x="20" y="48" width="100" height="100" fill="#191d24"/>
+  </g>
+  <g id="decoration-top">
+    <rect x="20" y="19" width="100" height="29" fill="#191d24"/>
+    <rect x="20" y="19" width="100" height="1" fill="#384152"/>
+  </g>
+  <g id="decoration-topleft">
+    <path d="M 19,48 L 19,25 Q 19,19 25,19 L 20,19 L 20,48 Z" fill="#191d24"/>
+    <rect x="19" y="19" width="1" height="29" fill="#384152"/>
+    <rect x="19" y="19" width="1" height="1" fill="#384152"/>
+  </g>
+  <g id="decoration-topright">
+    <rect x="120" y="19" width="1" height="29" fill="#384152"/>
+  </g>
+  <g id="decoration-left">
+    <rect x="19" y="48" width="1" height="100" fill="#384152"/>
+  </g>
+  <g id="decoration-right">
+    <rect x="120" y="48" width="1" height="100" fill="#384152"/>
+  </g>
+  <g id="decoration-bottom">
+    <rect x="20" y="148" width="100" height="1" fill="#384152"/>
+  </g>
+  <g id="decoration-bottomleft">
+    <rect x="19" y="148" width="1" height="1" fill="#384152"/>
+  </g>
+  <g id="decoration-bottomright">
+    <rect x="120" y="148" width="1" height="1" fill="#384152"/>
+  </g>
+
+  <!-- Inactive Window Decoration -->
+  <g id="decoration-inactive-center">
+    <rect x="170" y="48" width="100" height="100" fill="#20242c"/>
+  </g>
+  <g id="decoration-inactive-top">
+    <rect x="170" y="19" width="100" height="29" fill="#20242c"/>
+    <rect x="170" y="19" width="100" height="1" fill="#2d333f"/>
+  </g>
+  <g id="decoration-inactive-topleft">
+    <rect x="169" y="19" width="1" height="29" fill="#2d333f"/>
+  </g>
+  <g id="decoration-inactive-topright">
+    <rect x="270" y="19" width="1" height="29" fill="#2d333f"/>
+  </g>
+  <g id="decoration-inactive-left">
+    <rect x="169" y="48" width="1" height="100" fill="#2d333f"/>
+  </g>
+  <g id="decoration-inactive-right">
+    <rect x="270" y="48" width="1" height="100" fill="#2d333f"/>
+  </g>
+  <g id="decoration-inactive-bottom">
+    <rect x="170" y="148" width="100" height="1" fill="#2d333f"/>
+  </g>
+  <g id="decoration-inactive-bottomleft">
+    <rect x="169" y="148" width="1" height="1" fill="#2d333f"/>
+  </g>
+  <g id="decoration-inactive-bottomright">
+    <rect x="270" y="148" width="1" height="1" fill="#2d333f"/>
+  </g>
+</svg>

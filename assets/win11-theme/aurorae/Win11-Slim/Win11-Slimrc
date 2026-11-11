@@ -1,0 +1,25 @@
+[General]
+TitleAlignment=Left
+TitleHeight=28
+TitleEdgeTop=1
+TitleEdgeBottom=0
+TitleEdgeLeft=10
+TitleEdgeRight=0
+ButtonWidth=44
+ButtonWidthClose=44
+ButtonWidthMinimize=44
+ButtonWidthMaximizeRestore=44
+ButtonWidthMenu=24
+ButtonHeight=28
+ButtonSpacing=0
+ButtonMarginTop=0
+ExplicitButtonSpacer=0
+BorderLeft=1
+BorderRight=1
+BorderBottom=1
+BorderTop=0
+ActiveTextColor=245,247,250
+InactiveTextColor=148,155,168
+TitleFont=Noto Sans,9,-1,5,50,0,0,0,0,0
+Shadow=true
+DecorationPosition=0

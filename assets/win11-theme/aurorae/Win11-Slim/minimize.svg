@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="44" height="168" viewBox="0 0 44 168">
+  <g id="active-center">
+    <rect x="0" y="0" width="44" height="28" fill="none"/>
+    <line x1="17" y1="14" x2="27" y2="14" stroke="#e5e9f0" stroke-width="1.2" stroke-linecap="round"/>
+  </g>
+  <g id="hover-center" transform="translate(0,28)">
+    <rect x="0" y="0" width="44" height="28" fill="#ffffff" fill-opacity="0.1"/>
+    <line x1="17" y1="14" x2="27" y2="14" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round"/>
+  </g>
+  <g id="pressed-center" transform="translate(0,56)">
+    <rect x="0" y="0" width="44" height="28" fill="#ffffff" fill-opacity="0.16"/>
+    <line x1="17" y1="14" x2="27" y2="14" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round"/>
+  </g>
+  <g id="inactive-center" transform="translate(0,84)">
+    <rect x="0" y="0" width="44" height="28" fill="none"/>
+    <line x1="17" y1="14" x2="27" y2="14" stroke="#7c8594" stroke-width="1.2" stroke-linecap="round"/>
+  </g>
+  <g id="hover-inactive-center" transform="translate(0,112)">
+    <rect x="0" y="0" width="44" height="28" fill="#ffffff" fill-opacity="0.1"/>
+    <line x1="17" y1="14" x2="27" y2="14" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round"/>
+  </g>
+  <g id="deactivated-center" transform="translate(0,140)">
+    <rect x="0" y="0" width="44" height="28" fill="none"/>
+    <line x1="17" y1="14" x2="27" y2="14" stroke="#555c69" stroke-width="1.2" stroke-linecap="round"/>
+  </g>
+</svg>
