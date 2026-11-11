@@ -3,20 +3,8 @@
 # FeatherOS — One-Click Windows-Style Lightweight OS & Security Fortress Setup
 # Repository: https://github.com/chouaibe-k/feather-os
 # ==============================================================================
-# Designed for non-coders. Automatically configures:
-#   0. FeatherOS System & Bootloader Rebranding (Transforms base Q4OS -> FeatherOS)
-#   1. Ultra-Low RAM Booster (ZRAM zstd memory compression + kernel tuning)
-#   2. 5-Layer Anti-Virus, Anti-Trojan & Anti-Hacker Security Fortress
-#      - UFW Strict Firewall (blocks all incoming hacker connections)
-#      - ClamAV Antivirus + Daily Signature Updates + Automatic Downloads Guard
-#      - Anti-Malware / Anti-Phishing DNS Shield (Cloudflare 1.1.1.2 & Quad9 9.9.9.9)
-#      - Browser Shield (Auto-blocks malicious ads, popups, and Trojans)
-#   3. 100% Automatic System Updates + AI Remote Auto-Pilot
-#      - Pulls updates automatically from https://github.com/chouaibe-k/feather-os
-#        whenever you ask your AI assistant to make a change!
-# ==============================================================================
 
-set -euo pipefail
+set -u
 
 REPO_URL="https://raw.githubusercontent.com/chouaibe-k/feather-os/main"
 INSTALL_DIR="/opt/feather-os"
@@ -27,11 +15,7 @@ echo "======================================================================"
 
 # Elevate to root automatically with graphical password prompt (pkexec) or sudo
 if [ "$(id -u)" -ne 0 ]; then
-    if command -v pkexec >/dev/null 2>&1 && [ -n "${DISPLAY:-}" ]; then
-        exec pkexec bash "$0" "$@"
-    else
-        exec sudo bash "$0" "$@"
-    fi
+    exec sudo bash "$0" "$@"
 fi
 
 mkdir -p "${INSTALL_DIR}"
@@ -39,42 +23,36 @@ mkdir -p "${INSTALL_DIR}"
 if command -v apt-get >/dev/null 2>&1; then
     export DEBIAN_FRONTEND=noninteractive
 
-    echo "==> [0/6] Applying FeatherOS System & Dual-Boot Branding..."
-    hostnamectl set-hostname featheros 2>/dev/null || echo "featheros" > /etc/hostname
-    sed -i 's/q4os-desktop/featheros/g' /etc/hosts 2>/dev/null || true
+    echo "==> [1/6] Applying FeatherOS System & Dual-Boot Branding..."
+    OLD_HOSTNAME="$(hostname 2>/dev/null || echo debian)"
+    echo "featheros" > /etc/hostname
+    hostnamectl set-hostname featheros 2>/dev/null || hostname featheros 2>/dev/null || true
 
-    # Update /etc/os-release and /etc/lsb-release to display FeatherOS
-    if [ -f /etc/os-release ]; then
-        sed -i 's/^PRETTY_NAME=.*/PRETTY_NAME="FeatherOS 1.0 (Ultra-Light Windows Edition)"/' /etc/os-release || true
-        sed -i 's/^NAME=.*/NAME="FeatherOS"/' /etc/os-release || true
+    # Ensure /etc/hosts resolves 'featheros' cleanly so sudo never warns
+    if ! grep -q "featheros" /etc/hosts 2>/dev/null; then
+        echo "127.0.1.1	featheros ${OLD_HOSTNAME}" >> /etc/hosts
     fi
-    echo "FeatherOS 1.0 LTS \n \l" > /etc/issue
+
+    # Update /etc/os-release and /etc/issue to display FeatherOS
+    if [ -f /etc/os-release ]; then
+        sed -i 's/^PRETTY_NAME=.*/PRETTY_NAME="FeatherOS 1.0 (Ultra-Light Windows Edition)"/' /etc/os-release 2>/dev/null || true
+        sed -i 's/^NAME=.*/NAME="FeatherOS"/' /etc/os-release 2>/dev/null || true
+    fi
+    echo "FeatherOS 1.0 LTS \n \l" > /etc/issue 2>/dev/null || true
 
     # Update GRUB Dual-Boot Menu title to show "FeatherOS"
     if [ -f /etc/default/grub ]; then
-        sed -i 's/^GRUB_DISTRIBUTOR=.*/GRUB_DISTRIBUTOR="FeatherOS"/' /etc/default/grub || true
+        sed -i 's/^GRUB_DISTRIBUTOR=.*/GRUB_DISTRIBUTOR="FeatherOS"/' /etc/default/grub 2>/dev/null || true
         update-grub 2>/dev/null || true
     fi
 
-    echo "==> [1/6] Updating package catalogs..."
-    apt-get update -y
+    echo "==> [2/6] Updating package catalogs & installing core tools..."
+    apt-get update -y || true
+    apt-get install -y wget curl ca-certificates ufw unattended-upgrades || true
+    apt-get install -y zram-tools earlyoom tlp libnotify-bin || true
+    apt-get install -y clamav clamav-daemon clamav-freshclam || true
 
-    echo "==> [2/6] Installing ZRAM Memory Booster & Laptop Battery Saver..."
-    apt-get install -y \
-        zram-tools \
-        earlyoom \
-        tlp \
-        curl \
-        ca-certificates \
-        ufw \
-        unattended-upgrades \
-        apt-listchanges \
-        clamav \
-        clamav-daemon \
-        clamav-freshclam \
-        libnotify-bin || true
-
-    # Configure ZRAM (compresses RAM 3:1 so old laptops never freeze)
+    echo "==> [3/6] Activating ZRAM Memory Booster & Kernel Speed/Security Tuning..."
     cat > /etc/default/zramswap << 'EOF'
 ALGO=zstd
 PERCENT=75
@@ -108,13 +86,14 @@ kernel.yama.ptrace_scope = 1
 EOF
     sysctl --system >/dev/null 2>&1 || true
 
-    echo "==> [3/6] Activating Anti-Hacker Firewall (UFW)..."
-    ufw --force reset >/dev/null
-    ufw default deny incoming
-    ufw default allow outgoing
-    ufw --force enable
+    echo "==> [4/6] Activating Anti-Hacker Firewall (UFW) & Anti-Malware DNS..."
+    if command -v ufw >/dev/null 2>&1; then
+        ufw --force reset >/dev/null 2>&1 || true
+        ufw default deny incoming >/dev/null 2>&1 || true
+        ufw default allow outgoing >/dev/null 2>&1 || true
+        ufw --force enable >/dev/null 2>&1 || true
+    fi
 
-    echo "==> [4/6] Configuring Anti-Malware DNS Shield & Browser Protection..."
     # Configure Malware & Phishing Blocking DNS (Cloudflare Security 1.1.1.2 + Quad9 9.9.9.9)
     mkdir -p /etc/NetworkManager/conf.d
     cat > /etc/NetworkManager/conf.d/90-feather-security-dns.conf << 'EOF'
@@ -147,7 +126,6 @@ EOF
     systemctl enable --now clamav-freshclam 2>/dev/null || true
     cat > /usr/local/bin/feather-virus-scan << 'EOF'
 #!/usr/bin/env bash
-# Scans all user Downloads & Desktop folders for viruses/Trojans and quarantines threats
 QUARANTINE_DIR="/var/lib/clamav/quarantine"
 mkdir -p "${QUARANTINE_DIR}"
 chmod 700 "${QUARANTINE_DIR}"
@@ -162,7 +140,6 @@ done
 EOF
     chmod +x /usr/local/bin/feather-virus-scan
 
-    # Run daily automatic virus scan on Downloads & Desktop
     cat > /etc/cron.daily/feather-antivirus << 'EOF'
 #!/bin/sh
 /usr/local/bin/feather-virus-scan
@@ -177,18 +154,17 @@ APT::Periodic::AutocleanInterval "7";
 APT::Periodic::Unattended-Upgrade "1";
 EOF
 
-    # Install the AI Remote Auto-Pilot agent that pulls remote changes from GitHub
+    # Install the AI Remote Auto-Pilot agent (supports both wget and curl)
     cat > "${INSTALL_DIR}/autopilot-sync.sh" << 'EOF'
 #!/usr/bin/env bash
-set -euo pipefail
 REMOTE_SCRIPT_URL="https://raw.githubusercontent.com/chouaibe-k/feather-os/main/remote-updates.sh"
 STATE_FILE="/opt/feather-os/last_applied_version"
 TMP_SCRIPT="/tmp/feather-remote-updates.sh"
 
-if curl -fsSL "${REMOTE_SCRIPT_URL}" -o "${TMP_SCRIPT}"; then
+if wget -qO "${TMP_SCRIPT}" "${REMOTE_SCRIPT_URL}" 2>/dev/null || curl -fsSL "${REMOTE_SCRIPT_URL}" -o "${TMP_SCRIPT}" 2>/dev/null; then
     NEW_HASH="$(sha256sum "${TMP_SCRIPT}" | awk '{print $1}')"
     OLD_HASH="$(cat "${STATE_FILE}" 2>/dev/null || echo "")"
-    if [ "${NEW_HASH}" != "${OLD_HASH}" ]; then
+    if [ -n "${NEW_HASH}" ] && [ "${NEW_HASH}" != "${OLD_HASH}" ]; then
         bash "${TMP_SCRIPT}" && echo "${NEW_HASH}" > "${STATE_FILE}"
     fi
 fi
@@ -219,13 +195,9 @@ Persistent=true
 WantedBy=timers.target
 EOF
 
-    systemctl daemon-reload
-    systemctl enable --now feather-autopilot.timer
+    systemctl daemon-reload 2>/dev/null || true
+    systemctl enable --now feather-autopilot.timer 2>/dev/null || true
     "${INSTALL_DIR}/autopilot-sync.sh" || true
-
-elif command -v apk >/dev/null 2>&1; then
-    # Fallback for Alpine Linux
-    curl -fsSL "${REPO_URL}/install-feather-desktop.sh" | sh
 fi
 
 echo ""
