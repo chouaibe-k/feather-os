@@ -172,15 +172,13 @@ EOJS
             qdbus6 org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript "$PLASMA_JS" >/dev/null 2>&1 || true
         fi
 
-        # Also patch plasma-org.kde.plasma.desktop-appletsrc directly and refresh plasmashell
+        # Also patch plasma-org.kde.plasma.desktop-appletsrc directly and reload user service safely
         APPLETS_RC="$HOME/.config/plasma-org.kde.plasma.desktop-appletsrc"
         if [ -f "$APPLETS_RC" ]; then
             sed -i "s|^icon=.*|icon=/usr/share/icons/win11-start.svg|g" "$APPLETS_RC" 2>/dev/null || true
         fi
 
-        # Restart plasmashell cleanly so the new taskbar icons, Start button, and wallpaper appear immediately
-        killall plasmashell 2>/dev/null || true
-        nohup plasmashell >/dev/null 2>&1 &
+        systemctl --user restart plasma-plasmashell.service 2>/dev/null || true
     ' || true
 done
 
