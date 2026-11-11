@@ -28,9 +28,14 @@ mkdir -p "${INSTALL_DIR}"
 if command -v apt-get >/dev/null 2>&1; then
     export DEBIAN_FRONTEND=noninteractive
 
-    echo "==> [1/5] Applying FeatherOS System Branding (Safe Mode - Bootloader Untouched)..."
+    echo "==> [1/5] Applying FeatherOS System Branding & Locking Working Boot Config..."
     if [ -f /etc/os-release ]; then
         sed -i 's/^PRETTY_NAME=.*/PRETTY_NAME="FeatherOS 1.0 (Ultra-Light Windows Edition)"/' /etc/os-release 2>/dev/null || true
+    fi
+    # Protect the working Wubi/Q4OS grub.cfg (critical when installed on Drive D:)
+    if [ -f /boot/grub/grub.cfg ]; then
+        cp -f /boot/grub/grub.cfg /boot/grub/grub.cfg.working.bak 2>/dev/null || true
+        chattr +i /boot/grub/grub.cfg 2>/dev/null || true
     fi
 
     echo "==> [2/5] Installing Core Security & Low-RAM Tools..."
